@@ -130,6 +130,7 @@ public class FFProbeTests
         Assert.AreEqual(1, info.PrimaryVideoStream.SampleAspectRatio.Height);
         Assert.AreEqual("yuv420p", info.PrimaryVideoStream.PixelFormat);
         Assert.AreEqual(31, info.PrimaryVideoStream.Level);
+        Assert.AreEqual("progressive", info.PrimaryVideoStream.FieldOrder);
         Assert.AreEqual(1280, info.PrimaryVideoStream.Width);
         Assert.AreEqual(720, info.PrimaryVideoStream.Height);
         Assert.AreEqual(25, info.PrimaryVideoStream.AvgFrameRate);

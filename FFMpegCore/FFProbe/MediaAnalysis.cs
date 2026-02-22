@@ -88,6 +88,7 @@ internal class MediaAnalysis : IMediaAnalysis
             Profile = stream.Profile,
             PixelFormat = stream.PixelFormat,
             Level = stream.Level,
+            FieldOrder = stream.FieldOrder,
             ColorRange = stream.ColorRange,
             ColorSpace = stream.ColorSpace,
             ColorTransfer = stream.ColorTransfer,
