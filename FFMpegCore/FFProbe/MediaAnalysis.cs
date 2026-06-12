@@ -13,7 +13,7 @@ internal class MediaAnalysis : IMediaAnalysis
         VideoStreams = analysis.Streams.Where(stream => stream.CodecType == "video").Select(ParseVideoStream).ToList();
         AudioStreams = analysis.Streams.Where(stream => stream.CodecType == "audio").Select(ParseAudioStream).ToList();
         SubtitleStreams = analysis.Streams.Where(stream => stream.CodecType == "subtitle").Select(ParseSubtitleStream).ToList();
-        ErrorData = analysis.ErrorData;
+        ErrorData = analysis.ErrorData ?? Array.Empty<string>();
     }
 
     public TimeSpan Duration => new[] { Format.Duration, PrimaryVideoStream?.Duration ?? TimeSpan.Zero, PrimaryAudioStream?.Duration ?? TimeSpan.Zero }.Max();
@@ -88,6 +88,7 @@ internal class MediaAnalysis : IMediaAnalysis
             Profile = stream.Profile,
             PixelFormat = stream.PixelFormat,
             Level = stream.Level,
+            FieldOrder = stream.FieldOrder,
             ColorRange = stream.ColorRange,
             ColorSpace = stream.ColorSpace,
             ColorTransfer = stream.ColorTransfer,
@@ -96,7 +97,8 @@ internal class MediaAnalysis : IMediaAnalysis
             Language = stream.GetLanguage(),
             Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),
             Tags = stream.Tags.ToCaseInsensitive(),
-            BitDepth = GetBitDepth(stream)
+            BitDepth = GetBitDepth(stream),
+            SideData = stream.SideData
         };
     }
 
@@ -119,7 +121,8 @@ internal class MediaAnalysis : IMediaAnalysis
             Language = stream.GetLanguage(),
             Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),
             Tags = stream.Tags.ToCaseInsensitive(),
-            BitDepth = GetBitDepth(stream)
+            BitDepth = GetBitDepth(stream),
+            SideData = stream.SideData
         };
     }
 
@@ -135,7 +138,8 @@ internal class MediaAnalysis : IMediaAnalysis
             StartTime = MediaAnalysisUtils.ParseDuration(stream.StartTime),
             Language = stream.GetLanguage(),
             Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),
-            Tags = stream.Tags.ToCaseInsensitive()
+            Tags = stream.Tags.ToCaseInsensitive(),
+            SideData = stream.SideData
         };
     }
 }
