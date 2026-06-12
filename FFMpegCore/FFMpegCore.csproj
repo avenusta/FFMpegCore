@@ -2,16 +2,13 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Description>A .NET Standard FFMpeg/FFProbe wrapper for easily integrating media analysis and conversion into your .NET applications</Description>
-    <PackageVersion>5.4.0</PackageVersion>
+    <PackageId>Avenusta.FFMpegCore</PackageId>
+    <Description>Fork of FFMpegCore with additional features</Description>
+    <PackageVersion>5.4.1</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Fixed exception thrown on cancelling ffprobe analysis - by snechaev
-      - Support for cancellationtoken in SnapsnotAsync methods - by snechaev
-      - Added FFMetadataBuilder - by rosenbjerg
-      - Fix JoinImageSequence by passing framerate argument to input as well as output - by rosenbjerg
-      - Change fps input from int to double - by rosenbjerg
-      - Fix GetCreationTime method on ITagsContainer - by rosenbjerg
+      - Added FieldOrder to VideoStream, propagated from ffprobe field_order (FFMpegCore PR #614) - by bisforbomanPlint
+      - Added SideData to media streams and frame analysis, supporting Dolby Vision metadata and interlaced video detection (FFMpegCore PR #613) - by zenodity
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
