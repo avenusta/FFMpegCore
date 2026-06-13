@@ -12,6 +12,7 @@ public abstract class MediaStream : ITagsContainer
     public string? CodecTag { get; set; }
     public long BitRate { get; set; }
     public TimeSpan StartTime { get; set; }
+    public long? StartPts { get; set; }
     public TimeSpan Duration { get; set; }
     public (int Numerator, int Denominator) TimeBase { get; set; }
     public string? Language { get; set; }

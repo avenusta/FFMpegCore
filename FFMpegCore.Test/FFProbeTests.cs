@@ -121,6 +121,7 @@ public class FFProbeTests
         Assert.AreEqual(377351, info.PrimaryAudioStream.BitRate);
         Assert.AreEqual(48000, info.PrimaryAudioStream.SampleRateHz);
         Assert.AreEqual("fltp", info.PrimaryAudioStream.SampleFormat);
+        Assert.AreEqual(0, info.PrimaryAudioStream.StartPts);
         Assert.AreEqual("mp4a", info.PrimaryAudioStream.CodecTagString);
         Assert.AreEqual("0x6134706d", info.PrimaryAudioStream.CodecTag);
         Assert.AreEqual((1, 48000), info.PrimaryAudioStream.TimeBase);
@@ -227,6 +228,23 @@ public class FFProbeTests
         Assert.HasCount(10, info.PrimaryVideoStream.SideData[0]);
         Assert.IsTrue(info.PrimaryVideoStream.SideData[0].ContainsKey("side_data_type"));
         Assert.AreEqual(5, (int)info.PrimaryVideoStream.SideData[0]["dv_profile"]);
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_DolbyAudioDownmix()
+    {
+        var info = FFProbe.Analyse(TestResources.DolbyAudio);
+
+        Assert.IsNotNull(info.PrimaryAudioStream);
+        Assert.AreEqual("ac3", info.PrimaryAudioStream.CodecName);
+        Assert.AreEqual(6, info.PrimaryAudioStream.Channels);
+        Assert.AreEqual("fltp", info.PrimaryAudioStream.SampleFormat);
+        Assert.AreEqual("0", info.PrimaryAudioStream.DmixMode);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LtrtCmixlev);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LtrtSurmixlev);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LoroCmixlev);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LoroSurmixlev);
     }
 
     [TestMethod]

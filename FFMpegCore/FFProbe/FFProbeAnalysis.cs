@@ -77,6 +77,18 @@ public class FFProbeStream : ITagsContainer, IDispositionContainer
 
     [JsonPropertyName("sample_fmt")] public string SampleFormat { get; set; } = null!;
 
+    [JsonPropertyName("start_pts")] public long? StartPts { get; set; }
+
+    [JsonPropertyName("dmix_mode")] public string DmixMode { get; set; } = null!;
+
+    [JsonPropertyName("ltrt_cmixlev")] public string LtrtCmixlev { get; set; } = null!;
+
+    [JsonPropertyName("ltrt_surmixlev")] public string LtrtSurmixlev { get; set; } = null!;
+
+    [JsonPropertyName("loro_cmixlev")] public string LoroCmixlev { get; set; } = null!;
+
+    [JsonPropertyName("loro_surmixlev")] public string LoroSurmixlev { get; set; } = null!;
+
     [JsonPropertyName("side_data_list")] public List<Dictionary<string, JsonValue>> SideData { get; set; } = null!;
 
     [JsonPropertyName("color_range")] public string ColorRange { get; set; } = null!;
