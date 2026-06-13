@@ -65,6 +65,12 @@ public class FFProbeStream : ITagsContainer, IDispositionContainer
 
     [JsonPropertyName("field_order")] public string FieldOrder { get; set; } = null!;
 
+    [JsonPropertyName("has_b_frames")] public int? HasBFrames { get; set; }
+
+    [JsonPropertyName("is_avc")] public string IsAvc { get; set; } = null!;
+
+    [JsonPropertyName("nal_length_size")] public string NalLengthSize { get; set; } = null!;
+
     [JsonPropertyName("time_base")] public string TimeBase { get; set; } = null!;
 
     [JsonPropertyName("sample_rate")] public string SampleRate { get; set; } = null!;

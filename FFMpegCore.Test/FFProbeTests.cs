@@ -143,6 +143,9 @@ public class FFProbeTests
         Assert.AreEqual("avc1", info.PrimaryVideoStream.CodecTagString);
         Assert.AreEqual("0x31637661", info.PrimaryVideoStream.CodecTag);
         Assert.AreEqual((1, 12800), info.PrimaryVideoStream.TimeBase);
+        Assert.AreEqual(0, info.PrimaryVideoStream.HasBFrames);
+        Assert.IsTrue(info.PrimaryVideoStream.IsAvc);
+        Assert.AreEqual(4, info.PrimaryVideoStream.NalLengthSize);
     }
 
     [TestMethod]
@@ -247,6 +250,7 @@ public class FFProbeTests
         Assert.IsNotNull(info.PrimaryVideoStream);
         Assert.AreEqual("tv", info.PrimaryVideoStream.ColorRange);
         Assert.AreEqual("tt", info.PrimaryVideoStream.FieldOrder);
+        Assert.AreEqual(3, info.PrimaryVideoStream.HasBFrames);
     }
 
     [TestMethod]
