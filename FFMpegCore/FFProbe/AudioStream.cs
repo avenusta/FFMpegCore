@@ -3,7 +3,7 @@
 public class AudioStream : MediaStream
 {
     public int Channels { get; set; }
-    public string ChannelLayout { get; set; } = null!;
+    public string? ChannelLayout { get; set; }
     public int SampleRateHz { get; set; }
-    public string Profile { get; set; } = null!;
+    public string? Profile { get; set; }
 }

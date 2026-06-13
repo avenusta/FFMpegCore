@@ -6,10 +6,10 @@ namespace FFMpegCore;
 public abstract class MediaStream : ITagsContainer
 {
     public int Index { get; set; }
-    public string CodecName { get; set; } = null!;
-    public string CodecLongName { get; set; } = null!;
-    public string CodecTagString { get; set; } = null!;
-    public string CodecTag { get; set; } = null!;
+    public string? CodecName { get; set; }
+    public string? CodecLongName { get; set; }
+    public string? CodecTagString { get; set; }
+    public string? CodecTag { get; set; }
     public long BitRate { get; set; }
     public TimeSpan StartTime { get; set; }
     public TimeSpan Duration { get; set; }
@@ -22,6 +22,6 @@ public abstract class MediaStream : ITagsContainer
 
     public Codec GetCodecInfo()
     {
-        return FFMpeg.GetCodec(CodecName);
+        return FFMpeg.GetCodec(CodecName ?? throw new InvalidOperationException("Stream has no codec name."));
     }
 }
