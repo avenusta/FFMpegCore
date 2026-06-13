@@ -15,6 +15,9 @@ public class VideoStream : MediaStream
     public string PixelFormat { get; set; } = null!;
     public int Level { get; set; }
     public string FieldOrder { get; set; } = null!;
+    public int HasBFrames { get; set; }
+    public bool? IsAvc { get; set; }
+    public int NalLengthSize { get; set; }
     public int Rotation { get; set; }
     public double AverageFrameRate { get; set; }
     public string ColorRange { get; set; } = null!;
