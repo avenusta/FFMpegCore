@@ -122,6 +122,7 @@ public class FFProbeTests
         Assert.AreEqual(48000, info.PrimaryAudioStream.SampleRateHz);
         Assert.AreEqual("mp4a", info.PrimaryAudioStream.CodecTagString);
         Assert.AreEqual("0x6134706d", info.PrimaryAudioStream.CodecTag);
+        Assert.AreEqual((1, 48000), info.PrimaryAudioStream.TimeBase);
 
         Assert.AreEqual(1471810, info.PrimaryVideoStream!.BitRate);
         Assert.AreEqual(16, info.PrimaryVideoStream.DisplayAspectRatio.Width);
@@ -141,6 +142,7 @@ public class FFProbeTests
         Assert.AreEqual("Main", info.PrimaryVideoStream.Profile);
         Assert.AreEqual("avc1", info.PrimaryVideoStream.CodecTagString);
         Assert.AreEqual("0x31637661", info.PrimaryVideoStream.CodecTag);
+        Assert.AreEqual((1, 12800), info.PrimaryVideoStream.TimeBase);
     }
 
     [TestMethod]
