@@ -65,7 +65,29 @@ public class FFProbeStream : ITagsContainer, IDispositionContainer
 
     [JsonPropertyName("field_order")] public string FieldOrder { get; set; } = null!;
 
+    [JsonPropertyName("has_b_frames")] public int? HasBFrames { get; set; }
+
+    [JsonPropertyName("is_avc")] public string IsAvc { get; set; } = null!;
+
+    [JsonPropertyName("nal_length_size")] public string NalLengthSize { get; set; } = null!;
+
+    [JsonPropertyName("time_base")] public string TimeBase { get; set; } = null!;
+
     [JsonPropertyName("sample_rate")] public string SampleRate { get; set; } = null!;
+
+    [JsonPropertyName("sample_fmt")] public string SampleFormat { get; set; } = null!;
+
+    [JsonPropertyName("start_pts")] public long? StartPts { get; set; }
+
+    [JsonPropertyName("dmix_mode")] public string DmixMode { get; set; } = null!;
+
+    [JsonPropertyName("ltrt_cmixlev")] public string LtrtCmixlev { get; set; } = null!;
+
+    [JsonPropertyName("ltrt_surmixlev")] public string LtrtSurmixlev { get; set; } = null!;
+
+    [JsonPropertyName("loro_cmixlev")] public string LoroCmixlev { get; set; } = null!;
+
+    [JsonPropertyName("loro_surmixlev")] public string LoroSurmixlev { get; set; } = null!;
 
     [JsonPropertyName("side_data_list")] public List<Dictionary<string, JsonValue>> SideData { get; set; } = null!;
 

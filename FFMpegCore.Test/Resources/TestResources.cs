@@ -20,4 +20,5 @@ public static class TestResources
     public static readonly string MkvVideo = "./Resources/sampleMKV.mkv";
     public static readonly string Wav24Bit = "./Resources/24_bit_fixed.WAV";
     public static readonly string Wav32Bit = "./Resources/32_bit_float.WAV";
+    public static readonly string DolbyAudio = "./Resources/audio_ac3_5.1.mp4";
 }

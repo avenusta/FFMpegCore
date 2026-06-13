@@ -120,8 +120,11 @@ public class FFProbeTests
         Assert.AreEqual("LC", info.PrimaryAudioStream.Profile);
         Assert.AreEqual(377351, info.PrimaryAudioStream.BitRate);
         Assert.AreEqual(48000, info.PrimaryAudioStream.SampleRateHz);
+        Assert.AreEqual("fltp", info.PrimaryAudioStream.SampleFormat);
+        Assert.AreEqual(0, info.PrimaryAudioStream.StartPts);
         Assert.AreEqual("mp4a", info.PrimaryAudioStream.CodecTagString);
         Assert.AreEqual("0x6134706d", info.PrimaryAudioStream.CodecTag);
+        Assert.AreEqual((1, 48000), info.PrimaryAudioStream.TimeBase);
 
         Assert.AreEqual(1471810, info.PrimaryVideoStream!.BitRate);
         Assert.AreEqual(16, info.PrimaryVideoStream.DisplayAspectRatio.Width);
@@ -141,6 +144,10 @@ public class FFProbeTests
         Assert.AreEqual("Main", info.PrimaryVideoStream.Profile);
         Assert.AreEqual("avc1", info.PrimaryVideoStream.CodecTagString);
         Assert.AreEqual("0x31637661", info.PrimaryVideoStream.CodecTag);
+        Assert.AreEqual((1, 12800), info.PrimaryVideoStream.TimeBase);
+        Assert.AreEqual(0, info.PrimaryVideoStream.HasBFrames);
+        Assert.IsTrue(info.PrimaryVideoStream.IsAvc);
+        Assert.AreEqual(4, info.PrimaryVideoStream.NalLengthSize);
     }
 
     [TestMethod]
@@ -225,6 +232,23 @@ public class FFProbeTests
 
     [TestMethod]
     [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_DolbyAudioDownmix()
+    {
+        var info = FFProbe.Analyse(TestResources.DolbyAudio);
+
+        Assert.IsNotNull(info.PrimaryAudioStream);
+        Assert.AreEqual("ac3", info.PrimaryAudioStream.CodecName);
+        Assert.AreEqual(6, info.PrimaryAudioStream.Channels);
+        Assert.AreEqual("fltp", info.PrimaryAudioStream.SampleFormat);
+        Assert.AreEqual("0", info.PrimaryAudioStream.DmixMode);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LtrtCmixlev);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LtrtSurmixlev);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LoroCmixlev);
+        Assert.AreEqual("0.000000", info.PrimaryAudioStream.LoroSurmixlev);
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
     public void FrameAnalysis_Dovi()
     {
         var frameAnalysis = FFProbe.GetFrames(TestResources.DoviVideo);
@@ -245,6 +269,7 @@ public class FFProbeTests
         Assert.IsNotNull(info.PrimaryVideoStream);
         Assert.AreEqual("tv", info.PrimaryVideoStream.ColorRange);
         Assert.AreEqual("tt", info.PrimaryVideoStream.FieldOrder);
+        Assert.AreEqual(3, info.PrimaryVideoStream.HasBFrames);
     }
 
     [TestMethod]
