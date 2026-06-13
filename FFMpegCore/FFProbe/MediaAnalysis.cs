@@ -122,6 +122,7 @@ internal class MediaAnalysis : IMediaAnalysis
             StartTime = MediaAnalysisUtils.ParseDuration(stream.StartTime),
             TimeBase = MediaAnalysisUtils.ParseRatioInt(stream.TimeBase, '/'),
             SampleRateHz = !string.IsNullOrEmpty(stream.SampleRate) ? MediaAnalysisUtils.ParseIntInvariant(stream.SampleRate) : default,
+            SampleFormat = stream.SampleFormat,
             Profile = stream.Profile,
             Language = stream.GetLanguage(),
             Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),

@@ -75,6 +75,8 @@ public class FFProbeStream : ITagsContainer, IDispositionContainer
 
     [JsonPropertyName("sample_rate")] public string SampleRate { get; set; } = null!;
 
+    [JsonPropertyName("sample_fmt")] public string SampleFormat { get; set; } = null!;
+
     [JsonPropertyName("side_data_list")] public List<Dictionary<string, JsonValue>> SideData { get; set; } = null!;
 
     [JsonPropertyName("color_range")] public string ColorRange { get; set; } = null!;

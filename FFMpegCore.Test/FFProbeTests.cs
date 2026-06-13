@@ -120,6 +120,7 @@ public class FFProbeTests
         Assert.AreEqual("LC", info.PrimaryAudioStream.Profile);
         Assert.AreEqual(377351, info.PrimaryAudioStream.BitRate);
         Assert.AreEqual(48000, info.PrimaryAudioStream.SampleRateHz);
+        Assert.AreEqual("fltp", info.PrimaryAudioStream.SampleFormat);
         Assert.AreEqual("mp4a", info.PrimaryAudioStream.CodecTagString);
         Assert.AreEqual("0x6134706d", info.PrimaryAudioStream.CodecTag);
         Assert.AreEqual((1, 48000), info.PrimaryAudioStream.TimeBase);
