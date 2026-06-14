@@ -249,6 +249,46 @@ public class FFProbeTests
 
     [TestMethod]
     [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_SideData_DoviConfiguration()
+    {
+        var info = FFProbe.Analyse(TestResources.DoviVideo);
+
+        Assert.IsNotNull(info.PrimaryVideoStream);
+        var dovi = info.PrimaryVideoStream.GetDoviConfiguration();
+        Assert.IsNotNull(dovi);
+        Assert.AreEqual(1, dovi.DvVersionMajor);
+        Assert.AreEqual(0, dovi.DvVersionMinor);
+        Assert.AreEqual(5, dovi.DvProfile);
+        Assert.AreEqual(9, dovi.DvLevel);
+        Assert.AreEqual(1, dovi.RpuPresentFlag);
+        Assert.AreEqual(0, dovi.ElPresentFlag);
+        Assert.AreEqual(1, dovi.BlPresentFlag);
+        Assert.AreEqual(0, dovi.DvBlSignalCompatibilityId);
+        Assert.AreEqual("none", dovi.DvMdCompression);
+
+        // A stream without this side-data type returns null.
+        Assert.IsNull(info.PrimaryVideoStream.GetDisplayMatrix());
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_SideData_DisplayMatrix()
+    {
+        var info = FFProbe.Analyse(TestResources.Mp4VideoRotation);
+
+        Assert.IsNotNull(info.PrimaryVideoStream);
+        var matrix = info.PrimaryVideoStream.GetDisplayMatrix();
+        Assert.IsNotNull(matrix);
+        Assert.AreEqual(90, matrix.Rotation);
+
+        // A stream without any side data returns null.
+        var plain = FFProbe.Analyse(TestResources.Mp4Video);
+        Assert.IsNotNull(plain.PrimaryVideoStream);
+        Assert.IsNull(plain.PrimaryVideoStream.GetDoviConfiguration());
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
     public void FrameAnalysis_Dovi()
     {
         var frameAnalysis = FFProbe.GetFrames(TestResources.DoviVideo);
