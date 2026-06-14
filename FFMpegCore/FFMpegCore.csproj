@@ -4,13 +4,10 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.5.0</PackageVersion>
+    <PackageVersion>5.6.0</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Added TimeBase and StartPts to all media streams
-      - Added HasBFrames, IsAvc, and NalLengthSize to VideoStream
-      - Added SampleFormat and Dolby downmix metadata (DmixMode, LtrtCmixlev, LtrtSurmixlev, LoroCmixlev, LoroSurmixlev) to AudioStream
-      - BREAKING: stream string properties (e.g. CodecName, PixelFormat, Profile) are now nullable
+      - Added typed side-data helpers on media streams: GetSideData&lt;T&gt;, GetDoviConfiguration (DoviConfiguration), and GetDisplayMatrix (DisplayMatrix)
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>

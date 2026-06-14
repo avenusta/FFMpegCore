@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using FFMpegCore.Enums;
 
 namespace FFMpegCore;
@@ -24,5 +25,42 @@ public abstract class MediaStream : ITagsContainer
     public Codec GetCodecInfo()
     {
         return FFMpeg.GetCodec(CodecName ?? throw new InvalidOperationException("Stream has no codec name."));
+    }
+
+    /// <summary>
+    /// Returns the side-data entry whose ffprobe <c>side_data_type</c> matches <paramref name="sideDataType"/>,
+    /// deserialized into <typeparamref name="T"/>, or <c>null</c> when no such entry is present.
+    /// </summary>
+    public T? GetSideData<T>(string sideDataType) where T : class
+    {
+        var entry = SideData?.Find(item =>
+            item.TryGetValue("side_data_type", out var rawType) &&
+            rawType.GetValueKind() == JsonValueKind.String &&
+            rawType.GetValue<string>() == sideDataType);
+
+        if (entry == null)
+        {
+            return null;
+        }
+
+        var node = new JsonObject();
+        foreach (var pair in entry)
+        {
+            node[pair.Key] = pair.Value?.DeepClone();
+        }
+
+        return node.Deserialize<T>();
+    }
+
+    /// <summary>Returns the Dolby Vision configuration record, or <c>null</c> when absent.</summary>
+    public DoviConfiguration? GetDoviConfiguration()
+    {
+        return GetSideData<DoviConfiguration>(DoviConfiguration.SideDataType);
+    }
+
+    /// <summary>Returns the display matrix (transform/rotation), or <c>null</c> when absent.</summary>
+    public DisplayMatrix? GetDisplayMatrix()
+    {
+        return GetSideData<DisplayMatrix>(DisplayMatrix.SideDataType);
     }
 }
