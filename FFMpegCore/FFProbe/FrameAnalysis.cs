@@ -55,7 +55,7 @@ public class FFProbeFrameAnalysis
     [JsonPropertyName("repeat_pict")] public int RepeatPicture { get; set; }
 
     [JsonPropertyName("chroma_location")] public string ChromaLocation { get; set; } = null!;
-    
+
     [JsonPropertyName("side_data_list")] public List<Dictionary<string, JsonNode>> SideData { get; set; } = null!;
 }
 

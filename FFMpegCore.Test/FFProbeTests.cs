@@ -363,7 +363,7 @@ public class FFProbeTests
         Assert.IsTrue(frameAnalysis.Frames.All(f => f.SideData.Count == 2));
         Assert.IsTrue(frameAnalysis.Frames.All(f => (int)f.SideData[1]["signal_color_space"] == 2));
     }
-    
+
     [TestMethod]
     [Timeout(10000, CooperativeCancellation = true)]
     public void Probe_Interlaced()

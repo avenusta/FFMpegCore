@@ -1,4 +1,4 @@
-namespace FFMpegCore;
+﻿namespace FFMpegCore;
 
 public class AttachmentStream : MediaStream
 {
