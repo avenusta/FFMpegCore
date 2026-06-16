@@ -13,6 +13,7 @@ internal class MediaAnalysis : IMediaAnalysis
         VideoStreams = analysis.Streams.Where(stream => stream.CodecType == "video").Select(ParseVideoStream).ToList();
         AudioStreams = analysis.Streams.Where(stream => stream.CodecType == "audio").Select(ParseAudioStream).ToList();
         SubtitleStreams = analysis.Streams.Where(stream => stream.CodecType == "subtitle").Select(ParseSubtitleStream).ToList();
+        AttachmentStreams = analysis.Streams.Where(stream => stream.CodecType == "attachment").Select(ParseAttachmentStream).ToList();
         ErrorData = analysis.ErrorData ?? Array.Empty<string>();
     }
 
@@ -29,6 +30,7 @@ internal class MediaAnalysis : IMediaAnalysis
     public List<VideoStream> VideoStreams { get; }
     public List<AudioStream> AudioStreams { get; }
     public List<SubtitleStream> SubtitleStreams { get; }
+    public List<AttachmentStream> AttachmentStreams { get; }
     public IReadOnlyList<string> ErrorData { get; }
 
     private MediaFormat ParseFormat(Format analysisFormat)
@@ -147,6 +149,26 @@ internal class MediaAnalysis : IMediaAnalysis
             BitRate = !string.IsNullOrEmpty(stream.BitRate) ? MediaAnalysisUtils.ParseLongInvariant(stream.BitRate) : default,
             CodecName = stream.CodecName,
             CodecLongName = stream.CodecLongName,
+            Duration = MediaAnalysisUtils.ParseDuration(stream.Duration),
+            StartTime = MediaAnalysisUtils.ParseDuration(stream.StartTime),
+            StartPts = stream.StartPts,
+            TimeBase = MediaAnalysisUtils.ParseRatioInt(stream.TimeBase, '/'),
+            Language = stream.GetLanguage(),
+            Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),
+            Tags = stream.Tags.ToCaseInsensitive(),
+            SideData = stream.SideData
+        };
+    }
+
+    private AttachmentStream ParseAttachmentStream(FFProbeStream stream)
+    {
+        return new AttachmentStream
+        {
+            Index = stream.Index,
+            CodecName = stream.CodecName,
+            CodecLongName = stream.CodecLongName,
+            CodecTag = stream.CodecTag,
+            CodecTagString = stream.CodecTagString,
             Duration = MediaAnalysisUtils.ParseDuration(stream.Duration),
             StartTime = MediaAnalysisUtils.ParseDuration(stream.StartTime),
             StartPts = stream.StartPts,

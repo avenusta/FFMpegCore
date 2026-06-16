@@ -272,6 +272,70 @@ public class FFProbeTests
 
     [TestMethod]
     [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_AttachmentStream()
+    {
+        var info = FFProbe.Analyse(TestResources.MkvWithAttachment);
+
+        Assert.HasCount(1, info.AttachmentStreams);
+        var attachment = info.AttachmentStreams[0];
+        Assert.AreEqual(2, attachment.Index);
+        Assert.AreEqual("ttf", attachment.CodecName);
+        Assert.IsNotNull(attachment.Tags);
+        Assert.AreEqual("test_font.ttf", attachment.Tags["filename"]);
+        Assert.AreEqual("application/x-truetype-font", attachment.Tags["mimetype"]);
+
+        // Attachment streams are not surfaced as video/audio/subtitle.
+        Assert.HasCount(1, info.VideoStreams);
+        Assert.HasCount(1, info.AudioStreams);
+        Assert.IsEmpty(info.SubtitleStreams);
+
+        // A file without attachments has an empty (non-null) list.
+        var plain = FFProbe.Analyse(TestResources.Mp4Video);
+        Assert.IsEmpty(plain.AttachmentStreams);
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_AssSubtitleWithFontAttachment()
+    {
+        var info = FFProbe.Analyse(TestResources.MkvWithAssSubtitle);
+
+        // An ASS subtitle stream and the font it references are reported as distinct stream types.
+        Assert.HasCount(1, info.SubtitleStreams);
+        Assert.AreEqual("ass", info.PrimarySubtitleStream!.CodecName);
+
+        Assert.HasCount(1, info.AttachmentStreams);
+        var font = info.AttachmentStreams[0];
+        Assert.AreEqual("ttf", font.CodecName);
+        Assert.IsNotNull(font.Tags);
+        Assert.AreEqual("OpenSans-Semibold.ttf", font.Tags["filename"]);
+        Assert.AreEqual("application/x-truetype-font", font.Tags["mimetype"]);
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
+    public void Extract_AssSubtitle()
+    {
+        using var output = new TemporaryFile("extracted.ass");
+
+        var success = FFMpegArguments
+            .FromFileInput(TestResources.MkvWithAssSubtitle)
+            .OutputToFile(output, false, opt => opt
+                .WithCustomArgument("-map 0:s:0")
+                .ForceFormat("ass"))
+            .CancellableThrough(TestContext.CancellationToken)
+            .ProcessSynchronously();
+
+        Assert.IsTrue(success);
+
+        var ass = File.ReadAllText(output);
+        StringAssert.Contains(ass, "[Script Info]");
+        StringAssert.Contains(ass, "Dialogue:");
+        StringAssert.Contains(ass, "Huh?");
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
     public void Probe_SideData_DisplayMatrix()
     {
         var info = FFProbe.Analyse(TestResources.Mp4VideoRotation);
@@ -299,7 +363,7 @@ public class FFProbeTests
         Assert.IsTrue(frameAnalysis.Frames.All(f => f.SideData.Count == 2));
         Assert.IsTrue(frameAnalysis.Frames.All(f => (int)f.SideData[1]["signal_color_space"] == 2));
     }
-    
+
     [TestMethod]
     [Timeout(10000, CooperativeCancellation = true)]
     public void Probe_Interlaced()
