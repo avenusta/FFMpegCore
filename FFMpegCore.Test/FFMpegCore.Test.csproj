@@ -120,6 +120,9 @@
     <None Update="Resources\input_with_attachment.mkv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\input_ass_subtitle.mkv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\sampleVOC.voc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

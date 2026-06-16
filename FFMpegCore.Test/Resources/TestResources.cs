@@ -22,4 +22,5 @@ public static class TestResources
     public static readonly string Wav32Bit = "./Resources/32_bit_float.WAV";
     public static readonly string DolbyAudio = "./Resources/audio_ac3_5.1.mp4";
     public static readonly string MkvWithAttachment = "./Resources/input_with_attachment.mkv";
+    public static readonly string MkvWithAssSubtitle = "./Resources/input_ass_subtitle.mkv";
 }
