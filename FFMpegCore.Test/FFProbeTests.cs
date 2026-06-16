@@ -272,6 +272,30 @@ public class FFProbeTests
 
     [TestMethod]
     [Timeout(10000, CooperativeCancellation = true)]
+    public void Probe_AttachmentStream()
+    {
+        var info = FFProbe.Analyse(TestResources.MkvWithAttachment);
+
+        Assert.HasCount(1, info.AttachmentStreams);
+        var attachment = info.AttachmentStreams[0];
+        Assert.AreEqual(2, attachment.Index);
+        Assert.AreEqual("ttf", attachment.CodecName);
+        Assert.IsNotNull(attachment.Tags);
+        Assert.AreEqual("test_font.ttf", attachment.Tags["filename"]);
+        Assert.AreEqual("application/x-truetype-font", attachment.Tags["mimetype"]);
+
+        // Attachment streams are not surfaced as video/audio/subtitle.
+        Assert.HasCount(1, info.VideoStreams);
+        Assert.HasCount(1, info.AudioStreams);
+        Assert.IsEmpty(info.SubtitleStreams);
+
+        // A file without attachments has an empty (non-null) list.
+        var plain = FFProbe.Analyse(TestResources.Mp4Video);
+        Assert.IsEmpty(plain.AttachmentStreams);
+    }
+
+    [TestMethod]
+    [Timeout(10000, CooperativeCancellation = true)]
     public void Probe_SideData_DisplayMatrix()
     {
         var info = FFProbe.Analyse(TestResources.Mp4VideoRotation);
