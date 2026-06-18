@@ -1,5 +1,5 @@
 ﻿namespace FFMpegCore;
 
-public class AttachmentStream : MediaStream
+public class AttachmentStream : MediaStream, IAttachmentStream
 {
 }

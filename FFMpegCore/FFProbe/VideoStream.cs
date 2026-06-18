@@ -2,7 +2,7 @@
 
 namespace FFMpegCore;
 
-public class VideoStream : MediaStream
+public class VideoStream : MediaStream, IVideoStream
 {
     public double AvgFrameRate { get; set; }
     public int BitsPerRawSample { get; set; }
