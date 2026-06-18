@@ -1,5 +1,5 @@
 ﻿namespace FFMpegCore;
 
-public class SubtitleStream : MediaStream
+public class SubtitleStream : MediaStream, ISubtitleStream
 {
 }

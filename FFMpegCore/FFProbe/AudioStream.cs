@@ -1,6 +1,6 @@
 ﻿namespace FFMpegCore;
 
-public class AudioStream : MediaStream
+public class AudioStream : MediaStream, IAudioStream
 {
     public int Channels { get; set; }
     public string? ChannelLayout { get; set; }
