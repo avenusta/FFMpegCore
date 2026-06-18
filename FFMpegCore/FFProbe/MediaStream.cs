@@ -4,7 +4,7 @@ using FFMpegCore.Enums;
 
 namespace FFMpegCore;
 
-public abstract class MediaStream : ITagsContainer
+public abstract class MediaStream : IMediaStream, ITagsContainer
 {
     public int Index { get; set; }
     public string? CodecName { get; set; }
