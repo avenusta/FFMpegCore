@@ -4,10 +4,10 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.7.0</PackageVersion>
+    <PackageVersion>5.7.1</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Added attachment stream support: IMediaAnalysis.AttachmentStreams exposes container attachments (codec_type=attachment), e.g. fonts embedded alongside ASS/SSA subtitles
+      - Added stream interfaces: IMediaStream, IVideoStream, IAudioStream, ISubtitleStream, IAttachmentStream for use as entity/table definitions without dictionary properties
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
