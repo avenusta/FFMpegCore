@@ -12,12 +12,7 @@ public class MetaData : IReadOnlyMetaData
     {
         Entries = new Dictionary<string, string>(cloneSource.Entries);
         Chapters = cloneSource.Chapters
-            .Select(x => new ChapterData
-            (
-                start: x.Start,
-                end: x.End,
-                title: x.Title
-            ))
+            .Select(x => new ChapterData { Start = x.Start, End = x.End, Title = x.Title })
             .ToList();
     }
 

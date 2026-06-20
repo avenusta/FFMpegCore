@@ -48,12 +48,7 @@ public class MetaDataBuilder
         var end = start + duration;
         title = string.IsNullOrEmpty(title) ? $"Chapter {_metaData.Chapters.Count + 1}" : title;
 
-        _metaData.Chapters.Add(new ChapterData
-        (
-            start: start,
-            end: end,
-            title: title ?? string.Empty
-        ));
+        _metaData.Chapters.Add(new ChapterData { Start = start, End = end, Title = title ?? string.Empty });
 
         return this;
     }

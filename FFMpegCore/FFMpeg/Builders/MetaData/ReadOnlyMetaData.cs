@@ -6,12 +6,7 @@ public class ReadOnlyMetaData : IReadOnlyMetaData
     {
         Entries = new Dictionary<string, string>(metaData.Entries);
         Chapters = metaData.Chapters
-            .Select(x => new ChapterData
-            (
-                start: x.Start,
-                end: x.End,
-                title: x.Title
-            ))
+            .Select(x => new ChapterData { Start = x.Start, End = x.End, Title = x.Title })
             .ToList()
             .AsReadOnly();
     }
