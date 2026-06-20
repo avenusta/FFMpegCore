@@ -4,10 +4,10 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.7.4</PackageVersion>
+    <PackageVersion>5.7.5</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Move IChapterData to root FFMpegCore namespace for accessibility
+      - Version bump
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
