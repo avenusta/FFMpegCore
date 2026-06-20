@@ -4,10 +4,10 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.7.1</PackageVersion>
+    <PackageVersion>5.7.2</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Added stream interfaces: IMediaStream, IVideoStream, IAudioStream, ISubtitleStream, IAttachmentStream for use as entity/table definitions without dictionary properties
+      - Map all previously unmapped ffprobe fields: format size, filename, program count; subtitle stream codec tag and profile; attachment stream bitrate; chapter id, time base, pts, and tags
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
