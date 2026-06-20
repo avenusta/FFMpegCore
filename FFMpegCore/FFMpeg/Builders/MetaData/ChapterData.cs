@@ -1,16 +1,9 @@
 namespace FFMpegCore.Builders.MetaData;
 
-public class ChapterData
+public class ChapterData : IChapterData
 {
-    public ChapterData(string title, TimeSpan start, TimeSpan end)
-    {
-        Title = title;
-        Start = start;
-        End = end;
-    }
-
-    public long Id { get; set; }
-    public string Title { get; set; }
+    public int Id { get; set; }
+    public string Title { get; set; } = string.Empty;
     public TimeSpan Start { get; set; }
     public TimeSpan End { get; set; }
     public (int Numerator, int Denominator) TimeBase { get; set; }

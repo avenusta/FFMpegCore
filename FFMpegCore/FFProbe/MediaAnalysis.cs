@@ -58,13 +58,12 @@ internal class MediaAnalysis : IMediaAnalysis
 
     private ChapterData ParseChapter(Chapter analysisChapter)
     {
-        var title = GetValue("title", analysisChapter.Tags, "TitleValueNotSet");
-        var start = MediaAnalysisUtils.ParseDuration(analysisChapter.StartTime);
-        var end = MediaAnalysisUtils.ParseDuration(analysisChapter.EndTime);
-
-        return new ChapterData(title, start, end)
+        return new ChapterData
         {
-            Id = analysisChapter.Id,
+            Id = (int)analysisChapter.Id,
+            Title = GetValue("title", analysisChapter.Tags, string.Empty),
+            Start = MediaAnalysisUtils.ParseDuration(analysisChapter.StartTime),
+            End = MediaAnalysisUtils.ParseDuration(analysisChapter.EndTime),
             TimeBase = MediaAnalysisUtils.ParseRatioInt(analysisChapter.TimeBase, '/'),
             StartPts = analysisChapter.Start,
             EndPts = analysisChapter.End,
