@@ -1,4 +1,4 @@
-namespace FFMpegCore.Builders.MetaData;
+namespace FFMpegCore;
 
 public interface IChapterData
 {
