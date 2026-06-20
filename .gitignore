@@ -344,3 +344,4 @@ healthchecksdb
 !FFMpegCore/FFMPEG/bin/**/*
 
 .claude
+ffmpeg/

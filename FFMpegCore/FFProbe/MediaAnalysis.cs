@@ -37,13 +37,16 @@ internal class MediaAnalysis : IMediaAnalysis
     {
         return new MediaFormat
         {
+            Filename = analysisFormat.Filename,
             Duration = MediaAnalysisUtils.ParseDuration(analysisFormat.Duration),
             StartTime = MediaAnalysisUtils.ParseDuration(analysisFormat.StartTime),
             FormatName = analysisFormat.FormatName,
             FormatLongName = analysisFormat.FormatLongName,
             StreamCount = analysisFormat.NbStreams,
+            ProgramCount = analysisFormat.NbPrograms,
             ProbeScore = analysisFormat.ProbeScore,
             BitRate = long.Parse(analysisFormat.BitRate ?? "0"),
+            Size = long.Parse(analysisFormat.Size ?? "0"),
             Tags = analysisFormat.Tags.ToCaseInsensitive()
         };
     }
@@ -59,7 +62,14 @@ internal class MediaAnalysis : IMediaAnalysis
         var start = MediaAnalysisUtils.ParseDuration(analysisChapter.StartTime);
         var end = MediaAnalysisUtils.ParseDuration(analysisChapter.EndTime);
 
-        return new ChapterData(title, start, end);
+        return new ChapterData(title, start, end)
+        {
+            Id = analysisChapter.Id,
+            TimeBase = MediaAnalysisUtils.ParseRatioInt(analysisChapter.TimeBase, '/'),
+            StartPts = analysisChapter.Start,
+            EndPts = analysisChapter.End,
+            Tags = analysisChapter.Tags.ToCaseInsensitive()
+        };
     }
 
     private int? GetBitDepth(FFProbeStream stream)
@@ -149,6 +159,9 @@ internal class MediaAnalysis : IMediaAnalysis
             BitRate = !string.IsNullOrEmpty(stream.BitRate) ? MediaAnalysisUtils.ParseLongInvariant(stream.BitRate) : default,
             CodecName = stream.CodecName,
             CodecLongName = stream.CodecLongName,
+            CodecTag = stream.CodecTag,
+            CodecTagString = stream.CodecTagString,
+            Profile = stream.Profile,
             Duration = MediaAnalysisUtils.ParseDuration(stream.Duration),
             StartTime = MediaAnalysisUtils.ParseDuration(stream.StartTime),
             StartPts = stream.StartPts,
@@ -165,6 +178,7 @@ internal class MediaAnalysis : IMediaAnalysis
         return new AttachmentStream
         {
             Index = stream.Index,
+            BitRate = !string.IsNullOrEmpty(stream.BitRate) ? MediaAnalysisUtils.ParseLongInvariant(stream.BitRate) : default,
             CodecName = stream.CodecName,
             CodecLongName = stream.CodecLongName,
             CodecTag = stream.CodecTag,
