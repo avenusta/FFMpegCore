@@ -4,10 +4,10 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.7.2</PackageVersion>
+    <PackageVersion>5.7.3</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Map all previously unmapped ffprobe fields: format size, filename, program count; subtitle stream codec tag and profile; attachment stream bitrate; chapter id, time base, pts, and tags
+      - Add IChapterData interface; fix nullable annotations on all public models; remove ChapterData constructor in favor of object initializers
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
