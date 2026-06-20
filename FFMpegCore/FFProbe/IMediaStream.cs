@@ -76,5 +76,4 @@ public interface IMediaFormat : ITagsContainer
     double ProbeScore { get; set; }
     double BitRate { get; set; }
     long Size { get; set; }
-    Dictionary<string, string>? Tags { get; set; }
 }
