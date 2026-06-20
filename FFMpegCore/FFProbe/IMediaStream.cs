@@ -63,3 +63,18 @@ public interface IAudioStream : IMediaStream
 public interface ISubtitleStream : IMediaStream { }
 
 public interface IAttachmentStream : IMediaStream { }
+
+public interface IMediaFormat : ITagsContainer
+{
+    string? Filename { get; set; }
+    TimeSpan Duration { get; set; }
+    TimeSpan StartTime { get; set; }
+    string? FormatName { get; set; }
+    string? FormatLongName { get; set; }
+    int StreamCount { get; set; }
+    int ProgramCount { get; set; }
+    double ProbeScore { get; set; }
+    double BitRate { get; set; }
+    long Size { get; set; }
+    Dictionary<string, string>? Tags { get; set; }
+}
