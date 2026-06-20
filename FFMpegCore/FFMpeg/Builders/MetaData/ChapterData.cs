@@ -1,3 +1,5 @@
+using FFMpegCore;
+
 namespace FFMpegCore.Builders.MetaData;
 
 public class ChapterData : IChapterData
