@@ -4,10 +4,11 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.7.6</PackageVersion>
+    <PackageVersion>5.8.0</PackageVersion>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Add IMediaFormat interface
+      - BREAKING: IVideoStream.FrameRate and AvgFrameRate are now double? and return null when ffprobe reports no frame rate (0/0)
+      - Fix unparsable ratio values throwing instead of yielding null
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
