@@ -203,9 +203,10 @@ public static class MediaAnalysisUtils
         return dictionary?.ToDictionary(tag => tag.Key, tag => tag.Value, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, string>();
     }
 
-    public static double DivideRatio((double, double) ratio)
+    public static double? DivideRatio((double, double) ratio)
     {
-        return ratio.Item1 / ratio.Item2;
+        var result = ratio.Item1 / ratio.Item2;
+        return double.IsNaN(result) || double.IsInfinity(result) ? null : result;
     }
 
     public static (int, int) ParseRatioInt(string input, char separator)
@@ -232,7 +233,7 @@ public static class MediaAnalysisUtils
 
     public static double ParseDoubleInvariant(string line)
     {
-        return double.Parse(line, NumberStyles.Any, CultureInfo.InvariantCulture);
+        return double.TryParse(line, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : 0;
     }
 
     public static int ParseIntInvariant(string line)

@@ -24,14 +24,14 @@ public interface IMediaStream
 
 public interface IVideoStream : IMediaStream
 {
-    double AvgFrameRate { get; set; }
+    double? AvgFrameRate { get; set; }
     int BitsPerRawSample { get; set; }
     (int Width, int Height) DisplayAspectRatio { get; set; }
     (int Width, int Height) SampleAspectRatio { get; set; }
     string? Profile { get; set; }
     int Width { get; set; }
     int Height { get; set; }
-    double FrameRate { get; set; }
+    double? FrameRate { get; set; }
     string? PixelFormat { get; set; }
     int Level { get; set; }
     string? FieldOrder { get; set; }

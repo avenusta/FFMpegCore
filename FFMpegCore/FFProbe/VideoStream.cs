@@ -4,14 +4,14 @@ namespace FFMpegCore;
 
 public class VideoStream : MediaStream, IVideoStream
 {
-    public double AvgFrameRate { get; set; }
+    public double? AvgFrameRate { get; set; }
     public int BitsPerRawSample { get; set; }
     public (int Width, int Height) DisplayAspectRatio { get; set; }
     public (int Width, int Height) SampleAspectRatio { get; set; }
     public string? Profile { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
-    public double FrameRate { get; set; }
+    public double? FrameRate { get; set; }
     public string? PixelFormat { get; set; }
     public int Level { get; set; }
     public string? FieldOrder { get; set; }
