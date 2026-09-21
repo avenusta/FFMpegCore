@@ -254,18 +254,16 @@ public class FFMpegArgumentProcessor
 
         var arguments = _ffMpegArguments.Text;
 
-        //If local loglevel is null, set the global.
-        if (_logLevel == null)
+        var logLevel = _logLevel ?? ffOptions.LogLevel;
+        if (logLevel != null)
         {
-            _logLevel = ffOptions.LogLevel;
+            arguments += $" -v {logLevel.ToString().ToLower()}";
         }
 
-        //If neither local nor global loglevel is null, set the argument.
-        if (_logLevel != null)
+        var reportsProgress = _onTimeProgress != null || (_onPercentageProgress != null && _totalTimespan != null);
+        if (reportsProgress)
         {
-            var normalizedLogLevel = _logLevel.ToString()
-                .ToLower();
-            arguments += $" -v {normalizedLogLevel}";
+            arguments += " -stats";
         }
 
         var startInfo = new ProcessStartInfo
@@ -283,7 +281,7 @@ public class FFMpegArgumentProcessor
             processArguments.OutputDataReceived += OutputData;
         }
 
-        if (_onError != null || _onTimeProgress != null || (_onPercentageProgress != null && _totalTimespan != null))
+        if (_onError != null || reportsProgress)
         {
             processArguments.ErrorDataReceived += ErrorData;
         }

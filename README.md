@@ -3,7 +3,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/FFMpegCore)](https://www.nuget.org/packages/FFMpegCore/)
 [![GitHub issues](https://img.shields.io/github/issues/rosenbjerg/FFMpegCore)](https://github.com/rosenbjerg/FFMpegCore/issues)
 [![GitHub stars](https://img.shields.io/github/stars/rosenbjerg/FFMpegCore)](https://github.com/rosenbjerg/FFMpegCore/stargazers)
-[![GitHub](https://img.shields.io/github/license/rosenbjerg/FFMpegCore)](https://github.com/rosenbjerg/FFMpegCore/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/rosenbjerg/FFMpegCore)](https://github.com/rosenbjerg/FFMpegCore/blob/main/LICENSE)
 [![codecov](https://codecov.io/gh/rosenbjerg/FFMpegCore/branch/main/graph/badge.svg)](https://codecov.io/gh/rosenbjerg/FFMpegCore)
 [![CI](https://github.com/rosenbjerg/FFMpegCore/workflows/CI/badge.svg)](https://github.com/rosenbjerg/FFMpegCore/actions/workflows/ci.yml)
 [![GitHub code contributors](https://img.shields.io/github/contributors/rosenbjerg/FFMpegCore)](https://github.com/rosenbjerg/FFMpegCore/graphs/contributors)
@@ -85,11 +85,12 @@ The provided helper methods makes it simple to perform common operations.
 ### Easily capture snapshots from a video file:
 
 ```csharp
-// process the snapshot in-memory and use the Bitmap directly
-var bitmap = FFMpeg.Snapshot(inputPath, new Size(200, 400), TimeSpan.FromMinutes(1));
-
-// or persists the image on the drive
+// persist the image on the drive
 FFMpeg.Snapshot(inputPath, outputPath, new Size(200, 400), TimeSpan.FromMinutes(1));
+
+// or process the snapshot in-memory using one of the image extension packages
+// (FFMpegCore.Extensions.System.Drawing.Common or FFMpegCore.Extensions.SkiaSharp)
+var bitmap = FFMpegImage.Snapshot(inputPath, new Size(200, 400), TimeSpan.FromMinutes(1));
 ```
 
 ### You can also capture GIF snapshots from a video file:
@@ -128,9 +129,9 @@ FFMpeg.SubVideo(inputPath,
 
 ```csharp
 FFMpeg.JoinImageSequence(@"..\joined_video.mp4", frameRate: 1,
-    ImageInfo.FromPath(@"..\1.png"),
-    ImageInfo.FromPath(@"..\2.png"),
-    ImageInfo.FromPath(@"..\3.png")
+    @"..\1.png",
+    @"..\2.png",
+    @"..\3.png"
 );
 ```
 
@@ -155,8 +156,9 @@ FFMpeg.ReplaceAudio(inputPath, inputAudioPath, outputPath);
 ### Combine an image with audio file, for youtube or similar platforms
 
 ```csharp
-FFMpeg.PosterWithAudio(inputPath, inputAudioPath, outputPath);
-// or
+FFMpeg.PosterWithAudio(inputImagePath, inputAudioPath, outputPath);
+
+// or using one of the image extension packages
 var image = Image.FromFile(inputImagePath);
 image.AddAudio(inputAudioPath, outputPath);
 ```
@@ -168,8 +170,8 @@ Other available arguments could be found in `FFMpegCore.Arguments` namespace.
 With input piping it is possible to write video frames directly from program memory without saving them to jpeg or png and then passing path
 to input of ffmpeg. This feature also allows for converting video on-the-fly while frames are being generated or received.
 
-An object implementing the `IPipeSource` interface is used as the source of data. Currently, the `IPipeSource` interface has two
-implementations; `StreamPipeSource` for streams, and `RawVideoPipeSource` for raw video frames.
+An object implementing the `IPipeSource` interface is used as the source of data. Currently, the `IPipeSource` interface has three
+implementations; `StreamPipeSource` for streams, `RawVideoPipeSource` for raw video frames, and `RawAudioPipeSource` for raw audio samples.
 
 ### Working with raw video frames
 
@@ -199,19 +201,25 @@ await FFMpegArguments
     .ProcessAsynchronously();
 ```
 
-If you want to use `System.Drawing.Bitmap`s as `IVideoFrame`s, a `BitmapVideoFrameWrapper` wrapper class is provided.
+Both image extension packages provide a `BitmapVideoFrameWrapper` that adapts a `System.Drawing.Bitmap` or `SKBitmap` to `IVideoFrame`.
 
 # Binaries
 
 ## Runtime Auto Installation
-You can install a version of ffmpeg suite at runtime using `FFMpegDownloader.DownloadFFMpegSuite();`
+
+The `FFMpegCore.Extensions.Downloader` package can install ffmpeg and ffprobe at runtime into the configured `BinaryFolder`:
+
+```csharp
+GlobalFFOptions.Configure(options => options.BinaryFolder = "./bin");
+await FFMpegDownloader.DownloadBinaries();
+```
 
 This feature uses the api from [ffbinaries](https://ffbinaries.com/api).
 
 ## Manual Installation
 
 If you prefer to manually download them, visit [ffbinaries](https://ffbinaries.com/downloads)
-or [zeranoe Windows builds](https://ffmpeg.zeranoe.com/builds/).
+or the [official ffmpeg download page](https://ffmpeg.org/download.html).
 
 ### Windows (using choco)
 
@@ -221,13 +229,13 @@ location: `C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin`
 
 ### Mac OSX
 
-command: `brew install ffmpeg mono-libgdiplus`
+command: `brew install ffmpeg`
 
-location: `/usr/local/bin`
+location: `/opt/homebrew/bin` (Apple Silicon) or `/usr/local/bin` (Intel)
 
 ### Ubuntu
 
-command: `sudo apt-get install -y ffmpeg libgdiplus`
+command: `sudo apt-get install -y ffmpeg`
 
 location: `/usr/bin`
 
@@ -315,8 +323,8 @@ If these folders are not defined, it will try to find the binaries in `/{BinaryF
 
 # Compatibility
 
-Older versions of ffmpeg might not support all ffmpeg arguments available through this library. The library has been tested with version
-`3.3` to `4.2`
+Older versions of ffmpeg might not support all ffmpeg arguments available through this library. CI runs the test suite against
+ffmpeg `8.1`.
 
 ## Code contributors
 
@@ -324,12 +332,8 @@ Older versions of ffmpeg might not support all ffmpeg arguments available throug
   <img src="https://contrib.rocks/image?repo=rosenbjerg/ffmpegcore" />
 </a>
 
-## Other contributors
-
-<a href="https://github.com/tiesont"><img src="https://avatars3.githubusercontent.com/u/420293?v=4" title="tiesont" width="80" height="80"></a>
-
 ### License
 
 Copyright © 2023
 
-Released under [MIT license](https://github.com/rosenbjerg/FFMpegCore/blob/master/LICENSE)
+Released under [MIT license](https://github.com/rosenbjerg/FFMpegCore/blob/main/LICENSE)

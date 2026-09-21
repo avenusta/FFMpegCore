@@ -1,5 +1,4 @@
 ﻿using FFMpegCore.Exceptions;
-using Instances;
 
 namespace FFMpegCore.Helpers;
 
@@ -25,7 +24,7 @@ public static class FFProbeHelper
             return;
         }
 
-        var result = Instance.Finish(GlobalFFOptions.GetFFProbeBinaryPath(ffMpegOptions), "-version");
+        var result = ProcessHelper.Run(GlobalFFOptions.GetFFProbeBinaryPath(ffMpegOptions), "-version");
         // An explicit command must never inherit or populate the legacy global verification cache.
         if (!explicitCommand)
         {
