@@ -11,6 +11,25 @@
 A .NET Standard FFMpeg/FFProbe wrapper for easily integrating media analysis and conversion into your .NET applications. Supports both
 synchronous and asynchronous calls
 
+# Publishing this fork
+
+Push to `release` to publish `Avenusta.FFMpegCore` to NuGet and create a GitHub release
+with generated notes and package assets. Bump `<Version>` in
+`FFMpegCore/FFMpegCore.csproj` before publishing a new version. An unchanged version
+is skipped by NuGet; existing GitHub releases are left unchanged.
+
+The workflow `.github/workflows/release.yml` also supports manual runs on `release`.
+It packs only the core library; the pull-request CI workflow remains responsible for tests.
+Tags target the published commit. No local publishing script or API key is required.
+
+Repository setup:
+
+- Set `NUGET_USER` as a repository secret or a secret in the `release` environment.
+- Configure NuGet trusted publishing for that user's `Avenusta.FFMpegCore` package,
+  repository `avenusta/FFMpegCore`, workflow `release.yml`, and environment `release`.
+- Allow the workflow to write repository contents for tags and GitHub releases.
+- Environment approval rules, if configured, still apply before publishing.
+
 # API
 
 ## FFProbe
@@ -244,6 +263,31 @@ await FFMpegArguments
     .Configure(options => options.TemporaryFilesFolder = "./CurrentRunTmpFolder")
     .ProcessAsynchronously();
 ```
+
+### Exact executable paths
+
+Set independent executable overrides to bypass directory, architecture-subfolder, and fallback
+lookup. Command names such as `ffmpeg` use the operating system's PATH resolution. Explicit
+paths are used unchanged; an unavailable command fails rather than selecting another installation.
+Use executable paths without arguments or surrounding quotes. Null, empty, or whitespace overrides
+retain the existing `BinaryFolder` lookup. No sibling command is inferred by the library.
+
+```csharp
+var options = new FFOptions
+{
+    FFMpegBinaryPath = "/opt/media/ffmpeg",
+    FFProbeBinaryPath = "/opt/media/ffprobe"
+};
+var analysis = await FFProbe.AnalyseAsync(inputPath, options);
+await FFMpegArguments
+    .FromFileInput(inputPath)
+    .OutputToFile(outputPath)
+    .ProcessAsynchronously(true, options);
+```
+
+Per-call options do not modify global configuration. Finish configuring an options instance before
+passing it to an operation; use separate instances for concurrent operations with different commands.
+The same fields are supported by global configuration and `ffmpeg.config.json`.
 
 ### Option 2
 

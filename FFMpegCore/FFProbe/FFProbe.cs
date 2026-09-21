@@ -242,7 +242,7 @@ public static class FFProbe
 
     private static ProcessArguments PrepareInstance(string arguments, FFOptions ffOptions, string? customArguments)
     {
-        FFProbeHelper.RootExceptionCheck();
+        FFProbeHelper.RootExceptionCheck(ffOptions);
         FFProbeHelper.VerifyFFProbeExists(ffOptions);
         var startInfo = new ProcessStartInfo(GlobalFFOptions.GetFFProbeBinaryPath(ffOptions), $"{arguments} {customArguments}")
         {

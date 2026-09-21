@@ -9,8 +9,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 
     <RepositoryType>GitHub</RepositoryType>
-    <RepositoryUrl>https://github.com/rosenbjerg/FFMpegCore</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/rosenbjerg/FFMpegCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/avenusta/FFMpegCore</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/avenusta/FFMpegCore</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <NeutralLanguage>en</NeutralLanguage>
 
