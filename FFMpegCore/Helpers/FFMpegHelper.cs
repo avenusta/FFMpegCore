@@ -29,9 +29,11 @@ public static class FFMpegHelper
         }
     }
 
-    public static void RootExceptionCheck()
+    public static void RootExceptionCheck() => RootExceptionCheck(GlobalFFOptions.Current);
+
+    public static void RootExceptionCheck(FFOptions options)
     {
-        if (GlobalFFOptions.Current.BinaryFolder == null)
+        if (options.BinaryFolder == null && string.IsNullOrWhiteSpace(options.FFMpegBinaryPath))
         {
             throw new FFOptionsException("FFMpeg root is not configured in app config. Missing key 'BinaryFolder'.");
         }
@@ -39,14 +41,20 @@ public static class FFMpegHelper
 
     public static void VerifyFFMpegExists(FFOptions ffMpegOptions)
     {
-        if (_ffmpegVerified)
+        var explicitCommand = !string.IsNullOrWhiteSpace(ffMpegOptions.FFMpegBinaryPath);
+        if (!explicitCommand && _ffmpegVerified)
         {
             return;
         }
 
         var result = Instance.Finish(GlobalFFOptions.GetFFMpegBinaryPath(ffMpegOptions), "-version");
-        _ffmpegVerified = result.ExitCode == 0;
-        if (!_ffmpegVerified)
+        // An explicit command must never inherit or populate the legacy global verification cache.
+        if (!explicitCommand)
+        {
+            _ffmpegVerified = result.ExitCode == 0;
+        }
+
+        if (result.ExitCode != 0)
         {
             throw new FFMpegException(FFMpegExceptionType.Operation, "ffmpeg was not found on your system");
         }

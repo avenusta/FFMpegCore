@@ -249,7 +249,7 @@ public class FFMpegArgumentProcessor
 
     private ProcessArguments PrepareProcessArguments(FFOptions ffOptions)
     {
-        FFMpegHelper.RootExceptionCheck();
+        FFMpegHelper.RootExceptionCheck(ffOptions);
         FFMpegHelper.VerifyFFMpegExists(ffOptions);
 
         var arguments = _ffMpegArguments.Text;

@@ -7,9 +7,11 @@ public static class FFProbeHelper
 {
     private static bool _ffprobeVerified;
 
-    public static void RootExceptionCheck()
+    public static void RootExceptionCheck() => RootExceptionCheck(GlobalFFOptions.Current);
+
+    public static void RootExceptionCheck(FFOptions options)
     {
-        if (GlobalFFOptions.Current.BinaryFolder == null)
+        if (options.BinaryFolder == null && string.IsNullOrWhiteSpace(options.FFProbeBinaryPath))
         {
             throw new FFOptionsException("FFProbe root is not configured in app config. Missing key 'BinaryFolder'.");
         }
@@ -17,14 +19,20 @@ public static class FFProbeHelper
 
     public static void VerifyFFProbeExists(FFOptions ffMpegOptions)
     {
-        if (_ffprobeVerified)
+        var explicitCommand = !string.IsNullOrWhiteSpace(ffMpegOptions.FFProbeBinaryPath);
+        if (!explicitCommand && _ffprobeVerified)
         {
             return;
         }
 
         var result = Instance.Finish(GlobalFFOptions.GetFFProbeBinaryPath(ffMpegOptions), "-version");
-        _ffprobeVerified = result.ExitCode == 0;
-        if (!_ffprobeVerified)
+        // An explicit command must never inherit or populate the legacy global verification cache.
+        if (!explicitCommand)
+        {
+            _ffprobeVerified = result.ExitCode == 0;
+        }
+
+        if (result.ExitCode != 0)
         {
             throw new FFProbeException("ffprobe was not found on your system");
         }

@@ -22,12 +22,18 @@ public static class GlobalFFOptions
 
     public static string GetFFMpegBinaryPath(FFOptions? ffOptions = null)
     {
-        return GetFFBinaryPath("FFMpeg", ffOptions ?? Current);
+        var options = ffOptions ?? Current;
+        return !string.IsNullOrWhiteSpace(options.FFMpegBinaryPath)
+            ? options.FFMpegBinaryPath!
+            : GetFFBinaryPath("FFMpeg", options);
     }
 
     public static string GetFFProbeBinaryPath(FFOptions? ffOptions = null)
     {
-        return GetFFBinaryPath("FFProbe", ffOptions ?? Current);
+        var options = ffOptions ?? Current;
+        return !string.IsNullOrWhiteSpace(options.FFProbeBinaryPath)
+            ? options.FFProbeBinaryPath!
+            : GetFFBinaryPath("FFProbe", options);
     }
 
     private static string GetFFBinaryPath(string name, FFOptions ffOptions)

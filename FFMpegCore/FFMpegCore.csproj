@@ -4,11 +4,11 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <PackageVersion>5.8.0</PackageVersion>
+    <Version>5.9.0</Version>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - BREAKING: IVideoStream.FrameRate and AvgFrameRate are now double? and return null when ffprobe reports no frame rate (0/0)
-      - Fix unparsable ratio values throwing instead of yielding null
+      - Add independent per-operation FFMpegBinaryPath and FFProbeBinaryPath overrides with no directory or PATH fallback.
+      - Validate per-operation options without relying on global binary configuration or cached verification of another command.
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>

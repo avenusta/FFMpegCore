@@ -1,33 +1,75 @@
-name: NuGet release
+name: Publish to NuGet
+
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - release
+    branches: [release]
+  workflow_dispatch:
+
+concurrency:
+  group: nuget-release
+  cancel-in-progress: false
+
 jobs:
-  release:
+  publish:
+    if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     environment: release
     permissions:
-      contents: read
       id-token: write
+      contents: write
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Prepare .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
 
-    - name: Build package
-      run: dotnet pack FFMpegCore/FFMpegCore.csproj -c Release
+      # Publish only the fork's core package; extension packages keep their existing scope.
+      - name: Build package
+        run: dotnet pack FFMpegCore/FFMpegCore.csproj -c Release -o out -p:ContinuousIntegrationBuild=true
 
-    - name: NuGet login (OIDC → temp API key)
-      uses: NuGet/login@v1
-      id: login
-      with:
-        user: ${{ secrets.NUGET_USER }}
+      - name: Read package version
+        id: version
+        run: echo "value=$(dotnet msbuild FFMpegCore/FFMpegCore.csproj -getProperty:Version | tr -d '\r')" >> "$GITHUB_OUTPUT"
 
-    - name: Publish NuGet package
-      run: dotnet nuget push nupkg/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
+      # Never attach a newly built package to an already published, immutable NuGet version.
+      - name: Check published version
+        id: published
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          versions=$(curl --fail --silent --show-error --retry 3 https://api.nuget.org/v3-flatcontainer/avenusta.ffmpegcore/index.json)
+          if jq -e --arg version "$VERSION" '.versions | index($version) != null' <<< "$versions" > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Version $VERSION is already published; leaving packages, tags, and releases unchanged."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: NuGet login
+        if: steps.published.outputs.exists == 'false'
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Publish NuGet package
+        if: steps.published.outputs.exists == 'false'
+        run: dotnet nuget push "out/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
+
+      # A failed publish must not create a release. Existing releases make reruns a no-op.
+      - name: Create GitHub release
+        if: steps.published.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          tag="v$VERSION"
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "Release $tag already exists."
+          else
+            gh release create "$tag" out/*.nupkg out/*.snupkg \
+              --target "$GITHUB_SHA" --title "$tag" --generate-notes
+          fi

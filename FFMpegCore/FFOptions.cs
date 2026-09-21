@@ -17,6 +17,18 @@ public class FFOptions : ICloneable
     public string BinaryFolder { get; set; } = string.Empty;
 
     /// <summary>
+    ///     Exact ffmpeg executable or command name. When nonblank, bypasses BinaryFolder and all fallback lookup.
+    ///     Supply the executable only, without arguments or surrounding quotes. Null or whitespace uses legacy lookup.
+    /// </summary>
+    public string? FFMpegBinaryPath { get; set; }
+
+    /// <summary>
+    ///     Exact ffprobe executable or command name. When nonblank, bypasses BinaryFolder and all fallback lookup.
+    ///     Independent of FFMpegBinaryPath; no sibling executable is inferred.
+    /// </summary>
+    public string? FFProbeBinaryPath { get; set; }
+
+    /// <summary>
     ///     Folder used for temporary files necessary for static methods on FFMpeg class
     /// </summary>
     public string TemporaryFilesFolder { get; set; } = Path.GetTempPath();
