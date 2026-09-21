@@ -4,11 +4,15 @@
     <IsPackable>true</IsPackable>
     <PackageId>Avenusta.FFMpegCore</PackageId>
     <Description>Fork of FFMpegCore with additional features</Description>
-    <Version>5.9.0</Version>
+    <Version>5.10.0</Version>
     <PackageOutputPath>../nupkg</PackageOutputPath>
     <PackageReleaseNotes>
-      - Add independent per-operation FFMpegBinaryPath and FFProbeBinaryPath overrides with no directory or PATH fallback.
-      - Validate per-operation options without relying on global binary configuration or cached verification of another command.
+      - Prevent thread-pool starvation during binary checks and codec, format, and pixel-format discovery.
+      - Report progress at low log levels and avoid retaining per-run log-level settings.
+      - Support disabling subtitle and data streams.
+      - Fix relative demux-concat paths, tee output escaping and overwrite handling, and codec names in file-extension mappings.
+      - Propagate failures and cancellation from asynchronous frame and packet probing.
+      - Update Instances to 3.1.0 and expand regression coverage while preserving fork APIs and executable-path overrides.
     </PackageReleaseNotes>
     <PackageTags>ffmpeg ffprobe convert video audio mediafile resize analyze muxing</PackageTags>
     <Authors>Malte Rosenbjerg, Vlad Jerca, Max Bagryantsev</Authors>
