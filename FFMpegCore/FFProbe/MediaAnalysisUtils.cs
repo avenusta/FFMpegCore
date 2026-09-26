@@ -40,6 +40,35 @@ public static class MediaAnalysisUtils
         return (ratio.Length > 0 ? ParseDoubleInvariant(ratio[0]) : 0, ratio.Length > 1 ? ParseDoubleInvariant(ratio[1]) : 0);
     }
 
+    /// <summary>
+    /// Parses ffprobe's <c>-show_data</c> hex dump ("00000000: 0164 001f ...  .d..") into bytes.
+    /// Each line holds an 8-digit offset, ": ", a fixed 41-character hex column and an ASCII column.
+    /// </summary>
+    public static byte[]? ParseHexDump(string? dump)
+    {
+        if (dump is null || string.IsNullOrWhiteSpace(dump))
+        {
+            return null;
+        }
+
+        var bytes = new List<byte>();
+        foreach (var line in dump.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (line.Length < 10 || line[8] != ':')
+            {
+                continue;
+            }
+
+            var hex = line.Substring(10, Math.Min(41, line.Length - 10)).Replace(" ", string.Empty);
+            for (var i = 0; i + 1 < hex.Length; i += 2)
+            {
+                bytes.Add(byte.Parse(hex.Substring(i, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture));
+            }
+        }
+
+        return bytes.Count == 0 ? null : bytes.ToArray();
+    }
+
     public static double ParseDoubleInvariant(string line)
     {
         return double.TryParse(line, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : 0;

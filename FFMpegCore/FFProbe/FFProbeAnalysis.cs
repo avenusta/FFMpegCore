@@ -91,6 +91,9 @@ public class FFProbeStream : ITagsContainer, IDispositionContainer
 
     [JsonPropertyName("side_data_list")] public List<Dictionary<string, JsonValue>> SideData { get; set; } = null!;
 
+    /// <summary>Codec extradata as ffprobe's hex dump; present only when probing with <c>-show_data</c>.</summary>
+    [JsonPropertyName("extradata")] public string? Extradata { get; set; }
+
     [JsonPropertyName("color_range")] public string ColorRange { get; set; } = null!;
 
     [JsonPropertyName("color_space")] public string ColorSpace { get; set; } = null!;

@@ -22,6 +22,9 @@ public abstract class MediaStream : IMediaStream, ITagsContainer
     public Dictionary<string, string>? Tags { get; set; }
     public List<Dictionary<string, JsonValue>>? SideData { get; set; }
 
+    /// <summary>Codec extradata bytes (e.g. avcC, hvcC); populated only when probed with <c>-show_data</c>.</summary>
+    public byte[]? Extradata { get; set; }
+
     public Codec GetCodecInfo()
     {
         return FFMpeg.GetCodec(CodecName ?? throw new InvalidOperationException("Stream has no codec name."));

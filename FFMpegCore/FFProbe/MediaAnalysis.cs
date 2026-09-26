@@ -112,7 +112,8 @@ internal class MediaAnalysis : IMediaAnalysis
             Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),
             Tags = stream.Tags.ToCaseInsensitive(),
             BitDepth = GetBitDepth(stream),
-            SideData = stream.SideData
+            SideData = stream.SideData,
+            Extradata = MediaAnalysisUtils.ParseHexDump(stream.Extradata)
         };
     }
 
@@ -144,7 +145,8 @@ internal class MediaAnalysis : IMediaAnalysis
             Disposition = MediaAnalysisUtils.FormatDisposition(stream.Disposition),
             Tags = stream.Tags.ToCaseInsensitive(),
             BitDepth = GetBitDepth(stream),
-            SideData = stream.SideData
+            SideData = stream.SideData,
+            Extradata = MediaAnalysisUtils.ParseHexDump(stream.Extradata)
         };
     }
 

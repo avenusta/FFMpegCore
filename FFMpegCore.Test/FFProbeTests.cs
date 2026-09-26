@@ -152,6 +152,32 @@ public class FFProbeTests
     }
 
     [TestMethod]
+    public void Probe_Extradata_WithShowData()
+    {
+        var info = FFProbe.Analyse(TestResources.Mp4Video, customArguments: "-show_data");
+
+        CollectionAssert.AreEqual(new byte[] { 0x01, 0x4d, 0x40, 0x1f }, info.PrimaryVideoStream!.Extradata!.Take(4).ToArray());
+        Assert.HasCount(38, info.PrimaryVideoStream.Extradata!);
+        CollectionAssert.AreEqual(new byte[] { 0x11, 0xb0 }, info.PrimaryAudioStream!.Extradata);
+    }
+
+    [TestMethod]
+    public void Probe_Extradata_AbsentWithoutShowData()
+    {
+        var info = FFProbe.Analyse(TestResources.Mp4Video);
+
+        Assert.IsNull(info.PrimaryVideoStream!.Extradata);
+    }
+
+    [TestMethod]
+    public void MediaAnalysis_ParseHexDump_IgnoresAsciiColumn()
+    {
+        var bytes = MediaAnalysisUtils.ParseHexDump("\n00000000: 3a20 3030 3030                           : 0000\n");
+
+        CollectionAssert.AreEqual(new byte[] { 0x3a, 0x20, 0x30, 0x30, 0x30, 0x30 }, bytes);
+    }
+
+    [TestMethod]
     public void Probe_Rotation()
     {
         var info = FFProbe.Analyse(TestResources.Mp4Video);
